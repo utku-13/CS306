@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block title %}Şube Araçları{% endblock %}
+
+{% block content %}
+<h2>Şube Araçlarını Görüntüle</h2>
+
+{% for category, message in get_flashed_messages(with_categories=true) %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+
+<form method="POST" action="{{ url_for('branch_cars') }}">
+    <div class="form-group">
+        <label for="branch_id">Şube ID:</label>
+        <input type="number" id="branch_id" name="branch_id" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Araçları Göster</button>
+</form>
+
+{% if cars %}
+<div style="margin-top: 20px; border: 2px solid #4CAF50; padding: 15px; border-radius: 5px;">
+    <h3 style="color: #4CAF50;">Şube Araçları Listesi</h3>
+    <table class="car-table" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="padding: 12px; border: 1px solid #ddd;">Araç ID</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Marka</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Plaka</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Model</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in cars %}
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ car.car_id }}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ car.brand }}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ car.plate_number }}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ car.model }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %} 

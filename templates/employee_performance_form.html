@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block title %}Çalışan Performans Raporu{% endblock %}
+
+{% block content %}
+<h2>Çalışan Performans Raporu</h2>
+
+{% for category, message in get_flashed_messages(with_categories=true) %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+
+<form method="POST" action="{{ url_for('employee_performance') }}">
+    <div class="form-group">
+        <label for="emp_id">Çalışan ID:</label>
+        <input type="number" id="emp_id" name="emp_id" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Raporu Göster</button>
+</form>
+
+{% if employee %}
+<h3>Çalışan Bilgileri</h3>
+<div class="employee-details">
+    <p><strong>İsim:</strong> {{ employee.name }}</p>
+    <p><strong>Pozisyon:</strong> {{ employee.position }}</p>
+    <p><strong>Maaş:</strong> {{ employee.salary }}</p>
+    <p><strong>Şube:</strong> {{ employee.branch }}</p>
+</div>
+{% endif %}
+{% endblock %} 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Araç Kiralama Sistemi</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .menu a {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .menu a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Araç Kiralama Sistemi</h1>
+        <div class="menu">
+            <a href="{{ url_for('reservation') }}">Rezervasyon Yönetimi</a>
+            <a href="{{ url_for('branch_cars') }}">Araç Takip</a>
+            <a href="{{ url_for('employee_performance') }}">Çalışan Yönetimi</a>
+            <a href="{{ url_for('car_damage') }}">Hasar/Bakım Takip</a>
+        </div>
+    </div>
+</body>
+</html> 
