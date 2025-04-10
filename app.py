@@ -10,7 +10,7 @@ app.secret_key = 'arabakiralama123'
 def get_db_connection():
     connection = pymysql.connect(host='localhost',
                                  user='root',
-                                 password='',  # Veritabanı şifrenizi buraya yazın
+                                 password='U147613d!',  # MySQL şifrenizi buraya yazın
                                  database='RENTACAR',
                                  cursorclass=DictCursor)
     return connection
@@ -97,10 +97,19 @@ def employee_performance():
         try:
             conn = get_db_connection()
             with conn.cursor() as cursor:
-                cursor.callproc('EmployeePerformanceReport', (emp_id,))
-                result = cursor.fetchall()
-                if result:
-                    employee = result[0]
+                # Önce çalışanın var olup olmadığını kontrol et
+                cursor.execute("SELECT COUNT(*) as count FROM Employee WHERE emp_id = %s", (emp_id,))
+                result = cursor.fetchone()
+                
+                if not result or result['count'] == 0:
+                    flash(f'Hata: Çalışan ID {emp_id} bulunamadı.', 'error')
+                else:
+                    cursor.callproc('EmployeePerformanceReport', (emp_id,))
+                    result = cursor.fetchall()
+                    if result:
+                        employee = result[0]
+                    else:
+                        flash(f'Hata: Çalışan ID {emp_id} için performans raporu bulunamadı.', 'error')
         except Exception as e:
             flash(f'Hata: {str(e)}', 'error')
         finally:
@@ -120,8 +129,17 @@ def car_damage():
         try:
             conn = get_db_connection()
             with conn.cursor() as cursor:
-                cursor.callproc('GetCarDamageHistory', (car_id,))
-                damages = cursor.fetchall()
+                # Önce aracın var olup olmadığını kontrol et
+                cursor.execute("SELECT COUNT(*) as count FROM Branch_has_car WHERE car_id = %s", (car_id,))
+                result = cursor.fetchone()
+                
+                if not result or result['count'] == 0:
+                    flash(f'Hata: Araç ID {car_id} bulunamadı.', 'error')
+                else:
+                    cursor.callproc('GetCarDamageHistory', (car_id,))
+                    damages = cursor.fetchall()
+                    if not damages:
+                        flash(f'Araç ID {car_id} için hasar kaydı bulunamadı.', 'info')
         except Exception as e:
             flash(f'Hata: {str(e)}', 'error')
         finally:
@@ -131,4 +149,4 @@ def car_damage():
     return render_template('car_damage_form.html', damages=damages)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=False) 
+    app.run(host='0.0.0.0', port=5001, debug=True) 
